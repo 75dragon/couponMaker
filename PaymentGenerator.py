@@ -32,8 +32,8 @@ propertyAddress2 = "Coarsegold, CA 94112"
 url = "https://accounts.google.com/signin/v2/identifier?service=wise&passive=true&continue=http%3A%2F%2Fdrive.google.com%2F%3Futm_source%3Den_US&utm_medium=button&utm_campaign=web&utm_content=gotodrive&usp=gtd&ltmpl=drive&urp=https%3A%2F%2Fwww.google.com%2F&flowName=GlifWebSignIn&flowEntry=ServiceLogin"
 user = "drivefiletest@gmail.com"
 pwd = "gdrivetest123"
-driveLocation = "C:\\Users\\austi\\Desktop\\chromedriver.exe"
-timeDelay = 25
+driveLocation = "C:\\Users\\Austin Cheng\\Desktop\\chromedriver.exe"
+timeDelay = 5
 switchDelay = 2
 documentName = str(numberOfPayments) + " payments from " + clientName
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Code ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -58,13 +58,14 @@ myDriveElem = WebDriverWait(driver, timeDelay).until(EC.visibility_of_element_lo
 #click the My Drive button
 myDriveElem.click()
 #click the make document method
-makeDocumentElem = WebDriverWait(driver, timeDelay).until(EC.visibility_of_element_located((By.XPATH, '//div[@class="h-w a-w h-w a-w-Xi a-w-Mr"]/div[@class="a-w-x"]/div[6]')))
-makeDocumentElem.click();
+actionChains = ActionChains(driver)
+time.sleep(switchDelay)
+actionChains.send_keys(u'\ue015').send_keys(u'\ue015').send_keys(u'\ue015').send_keys(u'\ue015').send_keys(u'\ue006').perform()
 #move to the second window
 time.sleep(switchDelay)
 driver.switch_to_window(driver.window_handles[1])
 
-print(BOLD + "Giving the document a name of: " + documentName + END)
+print(BOLD + "Giving the document a name of: " + clientName + END)
 
 renameElem = WebDriverWait(driver, timeDelay).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="docs-title-widget"]/input')))
 renameElem.clear()
