@@ -11,23 +11,25 @@ import os
 import getpass
 #~~~~~~~~~~~~~~~~~~~~~~~ Client Information ~~~~~~~~~~~~~~~~~~~~~~~~~~#
 #above below the date 1/1/2017
-startMonth = 1
+startMonth = 10
 startDate = 1
 startYear = 2017
 #number of coupons to print
-numberOfPayments = 12
+numberOfPayments = 24
 #price of each coupon
-price = "$100.00"
+amount = "$2037.73"
+lateFee = "$203.78"
+lateAmount = "$2,241.51"
 #who to pay each check to
-payableTo = "Hua Cheng"
+payableToPerson = "Ling Meng"
+rentalTenant = "Susanne Stevenson"
 #where to mail the check to
 mailToLine1 = "P O Box 700173"
-mailToLine2 = "San Jose CA 95129"
-#the clients name
-clientName = "Thomas Nichols"
+mailToLine2 = "San Jose CA 95170"
+
 #the address of the client
-propertyAddress1 = "43905 North Dome Ct"
-propertyAddress2 = "Coarsegold, CA 94112"
+propertyAddress1 = "5Th Ave 2 North East"
+propertyAddress2 = "Carmel, CA 93921"
 #~~~~~~~~~~~~~~~~~~~~~~ Selenium Information ~~~~~~~~~~~~~~~~~~~~~~~~#
 url = "https://accounts.google.com/signin/v2/identifier?service=wise&passive=true&continue=http%3A%2F%2Fdrive.google.com%2F%3Futm_source%3Den_US&utm_medium=button&utm_campaign=web&utm_content=gotodrive&usp=gtd&ltmpl=drive&urp=https%3A%2F%2Fwww.google.com%2F&flowName=GlifWebSignIn&flowEntry=ServiceLogin"
 user = "drivefiletest@gmail.com"
@@ -35,7 +37,19 @@ pwd = "gdrivetest123"
 driveLocation = "C:\\Users\\Austin Cheng\\Desktop\\chromedriver.exe"
 timeDelay = 5
 switchDelay = 2
-documentName = str(numberOfPayments) + " payments from " + clientName
+#~~~~~~~~~~~~~~~~~~~ Coupon Making Information ~~~~~~~~~~~~~~~~~~~~~~#
+couponDividerS = "----------------------------------------------------------------------------------------------------------------------------"
+paymentNumberS = "Payment Number"
+dueDateS = "Due Date"
+paymentDueS = "Payment Due"
+ifReceivedAfterS = "If Received After"
+lateFeeAmountS = "Late Fee Amount"
+LPADS = "Late Payment Amount Due"
+couponNumber = 1
+payableTo = "Payable To: "
+mailTo = "Mail To: "
+name = "Name: "
+propertyAddress = "Property Address: "
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Code ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 driver = webdriver.Chrome(driveLocation)
 driver.get(url)
@@ -64,13 +78,38 @@ actionChains.send_keys(u'\ue015').send_keys(u'\ue015').send_keys(u'\ue015').send
 #move to the second window
 time.sleep(switchDelay)
 driver.switch_to_window(driver.window_handles[1])
+#we are inside the google doc right now
 
-print(BOLD + "Giving the document a name of: " + clientName + END)
-
-renameElem = WebDriverWait(driver, timeDelay).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="docs-title-widget"]/input')))
-renameElem.clear()
-renameElem.send_keys("")
-renameElem.send_keys(documentName)
-renameElem.send_keys(u'\ue006')
-time.sleep(switchDelay)
-#share with a friend
+for x in range(1, numberOfPayments + 1):
+    actionChains = ActionChains(driver)
+    time.sleep(switchDelay)
+    actionChains.key_down(u'\ue00a').send_keys('b').key_up(u'\ue00a').send_keys(u'\ue015').send_keys(u'\ue014').send_keys(u'\ue014').send_keys(u'\ue014').send_keys(u'\ue014').send_keys(u'\ue014').send_keys(u'\ue014').send_keys(u'\ue015').send_keys(u'\ue007').perform()
+    #do the first line of the table
+    actionChains = ActionChains(driver)
+    time.sleep(switchDelay)
+    actionChains.send_keys(paymentNumberS).send_keys(u'\ue004').send_keys(dueDateS).send_keys(u'\ue004').send_keys(paymentDueS).send_keys(u'\ue004').send_keys(ifReceivedAfterS).send_keys(u'\ue004').send_keys(lateFeeAmountS).send_keys(u'\ue004').send_keys(LPADS).send_keys(u'\ue004').perform()
+    #do the second line of the table
+    actionChains = ActionChains(driver)
+    time.sleep(switchDelay)
+    actionChains.send_keys(str(couponNumber)).send_keys(u'\ue004').send_keys(str(startMonth) + '/' + str(startDate) + '/' + str(startYear)).send_keys(u'\ue004').send_keys(amount).send_keys(u'\ue004').send_keys(str(startMonth) + '/' + str(startDate + 9) + '/' + str(startYear)).send_keys(u'\ue004').send_keys(lateFee).send_keys(u'\ue004').send_keys(lateAmount).send_keys(u'\ue015').send_keys(u'\ue007').perform()
+    #payable to and name
+    actionChains = ActionChains(driver)
+    time.sleep(switchDelay)
+    actionChains.key_down(u'\ue009').send_keys('b').key_up(u'\ue009').send_keys(payableTo).key_down(u'\ue009').send_keys('b').key_up(u'\ue009').send_keys('     ').send_keys(payableToPerson + '                               ').key_down(u'\ue009').send_keys('b').key_up(u'\ue009').send_keys(name).key_down(u'\ue009').send_keys('b').key_up(u'\ue009').send_keys(rentalTenant).send_keys(u'\ue007').perform();
+    #mail to line 1
+    actionChains = ActionChains(driver)
+    time.sleep(switchDelay)
+    actionChains.key_down(u'\ue009').send_keys('b').key_up(u'\ue009').send_keys(mailTo).key_down(u'\ue009').send_keys('b').key_up(u'\ue009').send_keys('     ').send_keys(mailToLine1 + '                          ').key_down(u'\ue009').send_keys('b').key_up(u'\ue009').send_keys(propertyAddress).key_down(u'\ue009').send_keys('b').key_up(u'\ue009').send_keys(propertyAddress1).send_keys(u'\ue007').perform();
+    #mail to line 2
+    actionChains = ActionChains(driver)
+    time.sleep(switchDelay)
+    actionChains.send_keys('                  ' + mailToLine2).send_keys('                                                ').send_keys(propertyAddress2).send_keys(u'\ue007').perform();
+    #divider
+    actionChains = ActionChains(driver)
+    time.sleep(switchDelay)
+    actionChains.send_keys(u'\ue007').send_keys(couponDividerS).send_keys(u'\ue007').send_keys(u'\ue007').perform();
+    startMonth = startMonth + 1;
+    couponNumber = couponNumber + 1;
+    if (startMonth > 12):
+        startMonth = 1;
+        startYear = startYear + 1;
